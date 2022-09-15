@@ -1,0 +1,64 @@
+﻿@model Expense
+@{
+    ViewData["Title"] = "Expense Reply";
+}
+
+<form asp-action="ExpenseReply" method="post" enctype="multipart/form-data">
+    <div class="form-group d-none">
+        <label asp-for="Id"></label>
+        <input asp-for="Id" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="ApplicationUser.FirstName">Employee Name</label>
+        <input asp-for="ApplicationUser.FirstName" value="@Model.ApplicationUser.FirstName @Model.ApplicationUser.LastName" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="ExpenseType">Expense Type</label>
+        <input asp-for="ExpenseType" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Price">Price</label>
+        <input asp-for="Price" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="RequestDate">Request Expense Date</label>
+        <input asp-for="RequestDate" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Description">Description</label>
+        <input asp-for="Description" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Response">Response</label>
+        <input asp-for="Response" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="FilePath"></label>
+        <a onclick=preview('@Model.FilePath') href="#">
+            <i class="fas fa-file-download"></i>
+        </a>
+    </div>
+
+    <input type="submit" name="Accept" value="Accept" class="btn btn-success" />
+    <input type="submit" name="Decline" value="Decline" class="btn btn-danger" />
+</form>
+
+@section Scripts{
+    <script>
+        function preview(fileName) {
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                data: { fileName: fileName },
+                url: "/Display/Index",
+                success: function (response) {
+                    if (response == 'File not found!') {
+                        alert(response);
+                    } else {
+                        window.open("/Display/Show?path=" + response, "_blank");
+                    }
+                },
+            });
+        };
+    </script>
+}

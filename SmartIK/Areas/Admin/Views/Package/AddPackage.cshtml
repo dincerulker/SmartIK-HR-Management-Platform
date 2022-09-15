@@ -1,0 +1,93 @@
+﻿@model AddPackageViewModel
+
+@section Link {
+    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+    <li class="breadcrumb-item"><a asp-action="Packages" asp-controller="Package">Packages</a></li>
+}
+
+<div class="container">
+    <form asp-action="AddPackage" method="post" enctype="multipart/form-data">
+        <div class="card card-warning">
+            <div class="card-header">
+                <h3 class="card-title">Create a Package</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label asp-for="PackageName"></label>
+                    <input asp-for="PackageName" class="form-control">
+                    @if (!string.IsNullOrEmpty(ViewBag.ExistPackage))
+                    {
+                        <span class="text-danger">@ViewBag.ExistPackage</span>
+                    }
+                    <span class="text-danger" asp-validation-for="PackageName"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PackageDescription"></label>
+                    <textarea asp-for="PackageDescription" class="form-control"></textarea>
+                    <span class="text-danger" asp-validation-for="PackageDescription"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PackagePrice"></label>
+                    <input asp-for="PackagePrice" class="form-control">
+                    <span class="text-danger" asp-validation-for="PackagePrice"></span>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="PublishStartDate"></label>
+                            <input asp-for="PublishStartDate" type="date" placeholder="dd-mm-yyyy" class="form-control">
+                            <span class="text-danger" asp-validation-for="PublishStartDate"></span>
+                            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                            {
+                                <span class="text-danger">@ViewBag.ErrorMessage</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="PublishEndDate"></label>
+                            <input asp-for="PublishEndDate" type="date" placeholder="dd-mm-yyyy" class="form-control">
+                            <span class="text-danger" asp-validation-for="PublishEndDate"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control d-none" asp-for="Image"></label>
+                    <div class="my-2 d-none" id="preview">
+                        <img src="#" alt="Preview" height="200" />
+                    </div>
+                    <input asp-for="Image" type="file" class="form-control-file">
+                    <span asp-validation-for="Image" class="text-danger"></span>
+
+                </div>
+                <button class="btn btn-success">Create</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @*<partial name="_AddImageScriptsPartial" />*@
+    <script>
+        // Add image and preview
+        var img = $("#preview > img")[0];
+        $("#Image").change(function (event) {
+            var imgFile = this.files[0];
+            if (imgFile && imgFile.type.startsWith("image/")) {
+                img.src = URL.createObjectURL(imgFile);
+                $("#preview").removeClass("d-none");
+            }
+            else {
+                img.src = "#";
+                $("#preview").addClass("d-none");
+            }
+        });
+    </script>
+}

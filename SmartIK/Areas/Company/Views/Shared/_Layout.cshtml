@@ -1,0 +1,349 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using SmartIK.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using System.Security.Claims
+
+
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var userId = UserManager.GetUserId(User);
+    Corporation corporation = new Corporation();
+    corporation.Id = (int)user.CorparationId;
+    var package = corporation.Package;
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SmartIK Admin Panel @ViewData["Title"]</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Admin/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Admin/dist/css/adminlte.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/Admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    @* Data-Table *@
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" />
+</head>
+<body class="hold-transition sidebar-mini layout-fixed accent-lightblue">
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content d-flex">
+                <div class="modal-header align-item-center justify-content-center border-bottom-0 mt-3">
+                    <img class="smart-logo" src="~/img/Smart-logo.jpg" alt="SmartIK" style="height: 150px; margin-top: 20px;" />
+                </div>
+                <div class="modal-header align-item-center justify-content-center border-bottom-0">
+                    <p class="modal-title fs-3 fw-bold text-center" id="staticBackdropLabel">You are logging out!</p>
+                </div>
+                <div class="modal-body align-item-center justify-content-center">
+                    <p class="text-center">@user.FirstName @user.LastName, Are you sure to want to log out?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/Identity/Account/Login" method="post">
+                        <button type="submit" class="btn btn-danger text-white fw-bold">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <!-- Preloader -->
+        @await RenderSectionAsync("Preloader", required: false)
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-dark navbar-gray-dark" @*style="background-color: #748DA6 "*@>
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a asp-controller="Dashboard" asp-action="Index" class="nav-link">Home</a>
+                </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Navbar Search -->
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ml-2" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <i class="fa-solid fa-right-from-bracket mr-2"></i>Logout
+                    </a>
+                </li>
+                @*<li class="nav-item">
+                        <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
+                            <i class="fas fa-th-large"></i>
+                        </a>
+                    </li>*@
+            </ul>
+
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-light-green  elevation-4">
+            <!-- Brand Logo -->
+            <a asp-area="Company" class="brand-link" style="text-decoration:none;">
+                <img asp-controller="Home" asp-action="Index" src="~/img/Smart-logo.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3 " style="height: 50px;">
+                <span class="brand-text ">Smart IK</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="~/img/@user.PicturePath" class="img-circle elevation-2" alt="User Image">
+                    </div>
+                    <div class="info">
+                        <a asp-controller="Home" asp-action="Index" class="d-block text-dark text-decoration-none">@user.FirstName @user.LastName</a>
+                    </div>
+                </div>
+
+                <!-- SidebarSearch Form -->
+                <div class="form-inline">
+                    <div class="input-group" data-widget="sidebar-search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-sidebar">
+                                <i class="fas fa-search fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+    with font-awesome or any other icon font library -->
+                        <li class="nav-item menu">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-brands fa-adn"></i>
+                                <p>
+                                    Advance Operation
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="AdvancePayment" asp-action="Advances" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Advances</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-area="Company" asp-controller="AdvancePayment" asp-action="APCreate" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Advance Payment</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item menu">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-brands fa-product-hunt"></i>
+                                <p>
+                                    Premission Operation
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="Permission" asp-action="Permissions" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Permissions</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Permission" asp-action="PMCreate" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Permissions Create </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item menu">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-money-bill-1"></i>
+                                <p>
+                                    Expense Operation
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="Expense" asp-action="Index" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Expenses</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Expense" asp-action="Create" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Expense Create </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @if (await UserManager.IsInRoleAsync(user, "Company Manager"))
+                        {
+                            <li class="nav-item menu">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-users"></i>
+                                    <p>
+                                        User Operation
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a asp-controller="Employee" asp-action="List" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>User List</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-controller="Employee" asp-action="CreateEmployee" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Employee Create</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item menu">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-credit-card nav-icon"></i>
+                                    <p>
+                                        Credit Card Operation
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a asp-controller="CreditCard" asp-action="AddCreditCard" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add Credit Card</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item menu">
+                                <a href="#" class="nav-link">
+                                    <i class="fa-solid fa-wallet nav-icon"></i>
+                                    <p>
+                                        Wallet Operation
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a asp-controller="Wallet" asp-action="AddBalance" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add Balance</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        }
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">@ViewData["Title"]</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                @await RenderSectionAsync("Link", required: false)
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Small boxes (Stat box) -->
+                    @RenderBody()
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2022 Smart IK</strong>
+            All rights reserved.
+            <div class="float-right d-sm-inline-block">
+                SMART IK Company Panel
+            </div>
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+    <script src="~/Admin/plugins/jquery/jquery-3.6.0.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="~/Admin/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 - 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="~/Admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- ChartJS -->
+    <script src="~/Admin/plugins/chart.js/Chart.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="~/Admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/Admin/dist/js/adminlte.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/Admin/dist/js/demo.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="~/Admin/dist/js/pages/dashboard.js"></script>
+    <!-- SweetAlert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--Custom Javascripts-->
+    @* Data Table *@
+    <script src=" //cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

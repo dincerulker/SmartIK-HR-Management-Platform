@@ -1,0 +1,202 @@
+﻿@model HomeViewModel
+@{
+    ViewData["Title"] = "Company User Page";
+}
+
+@if (TempData["Greetings"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["Greetings"]
+    </div>
+    if (Model.Corporation.Package == null)
+    {
+        <div class="alert alert-default-danger">
+            You do not own a package so you must purchase a package compatible with your employee count
+
+
+        </div>
+
+    }
+
+}
+<div class="container emp-profile">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="profile-img">
+                <img src="/img/@Model.ApplicationUser.PicturePath" alt="" height="200" />
+                <img />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="profile-head">
+                <p style="font-size: 30px;"> @Model.ApplicationUser.FirstName @Model.ApplicationUser.LastName</p>
+                <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-bottom:-50px; margin-top: 20px;">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Company Details</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: -50px;">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-8">
+            <div class="tab-content profile-tab" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Name: </label>
+                        </div>
+                        <div class="col-md-6">
+                            <p> @Model.ApplicationUser.FirstName @Model.ApplicationUser.LastName</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>User Name: </label>
+                        </div>
+                        <div class="col-md-6">
+                            <p> @Model.ApplicationUser.UserName </p>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Salary: </label>
+                        </div>
+                        <div class="col-md-6">
+                            @if (@Model.ApplicationUser.Salary != null)
+                            {
+                                <p>
+                                    @Model.ApplicationUser.Salary.Value.ToString("C2")
+                                </p>
+                            }
+                            else
+                            {
+                                <p>0$</p>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Address: </label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>@Model.ApplicationUser.Address</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Remaining Day Off:</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>@Model.RemaningPermission Day</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Permission Days :</label>
+                        </div>
+                        <div class="col-md-6">
+                            @if (@Model.ApplicationUser.UsingPermissionDays == null)
+                            {
+                                <p>0</p>
+                            }
+                            else
+                            {
+                                <p>@Model.ApplicationUser.UsingPermissionDays</p>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Used Advance Amount:</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>@Model.UsedAdvance.ToString("C2")</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Company Name :</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>@Model.Corporation.CompanyName</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Web Sites :</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>@Model.Corporation.Websites</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Phone Number :</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>@Model.Corporation.PhoneNumber</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>E-Mail Adress :</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p> @Model.Corporation.MailAddress</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Tax Number :</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>@Model.Corporation.TaxNumber</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Mersis Number :</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>@Model.Corporation.MersisNumber</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Address :</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>@Model.Corporation.Address</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Balance :</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>@Model.Wallet.Balance.Value.ToString("c2")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">

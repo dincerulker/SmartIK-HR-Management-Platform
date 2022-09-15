@@ -1,0 +1,82 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using SmartIK.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using System.Security.Claims
+@model AdvanceViewModel
+@{
+    ViewData["Title"] = "Advances";
+    var user = await UserManager.GetUserAsync(User);
+    var userId = UserManager.GetUserId(User);
+}
+
+@section Link {
+    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+    <li class="breadcrumb-item"><a asp-controller="Company" asp-action="Companies">Companies</a></li>
+}
+
+
+<table id="myTable" class="table table-light table-hover table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th class="text-center align-middle">Employee</th>
+            <th class="text-center align-middle">Description</th>
+            <th class="text-center align-middle">Advance Amount</th>
+            <th class="text-center align-middle">Request Date</th>
+            <th class="text-center align-middle">Reply Date</th>
+            <th class="text-center align-middle">Response</th>
+            <th class="text-center align-middle">Status</th>
+            @if (await UserManager.IsInRoleAsync(user, "Company Manager"))
+            {
+                <th class="text-center align-middle">Advance Operations</th>
+            }
+        </tr>
+    </thead>
+    <tbody class="">
+        @foreach (var advance in Model.Advances)
+        {
+            <tr>
+                <td class="text-center align-middle">@advance.ApplicationUser.FirstName @advance.ApplicationUser.LastName</td>
+                <td class="text-center align-middle">@advance.Description</td>
+                <td class="text-center align-middle">@advance.AdvanceAmount.ToString("C2")</td>
+                <td class="text-center align-middle">@advance.RequestDate.ToShortDateString()</td>
+                <td class="text-center align-middle">@advance.RequestDate.ToShortDateString()</td>
+                <td class="text-center align-middle">@advance.Response</td>
+                <td class="text-center align-middle">
+                    @if (advance.Status == StatusEnum.Accept)
+                    {
+                        <i style="color: green;" class="fa-regular fa-circle-check"></i>
+                    }
+                    else if (advance.Status == StatusEnum.Decline)
+                    {
+                        <i style="color: red;" class="fa-regular fa-circle-xmark"></i>
+                    }
+                    else
+                    {
+                        <i style="color: #B09900;" class="fa-regular fa-hourglass-half"></i>
+                    }
+                </td>
+                @if (await UserManager.IsInRoleAsync(user, "Company Manager"))
+                {
+                    if (advance.Status == StatusEnum.Waiting)
+                    {
+                        <td class="text-center align-middle">
+                            <a class="btn btn-outline-primary" asp-controller="AdvancePayment" asp-action="AdvanceReply" asp-route-id="@advance.Id">Reply</a>
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json"
+                }
+            });
+        });
+    </script>
+}

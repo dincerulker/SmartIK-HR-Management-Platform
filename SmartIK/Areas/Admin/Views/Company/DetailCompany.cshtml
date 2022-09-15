@@ -1,0 +1,68 @@
+﻿@model DetailCompanyViewModel
+@{
+    ViewData["Title"] = "Company Detail";
+}
+
+@section Link {
+    <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Home</a></li>
+    <li class="breadcrumb-item"><a asp-controller="Company" asp-action="Companies">Companies</a></li>
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <div class="container">
+                <div class="d-flex align-items-center justify-content-center">
+                    <div>
+                        <img src="~/img/@Model.LogoUri" height="400" class="company-image" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="CompanyName"></label>
+                        <input asp-for="CompanyName" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber"></label>
+                        <input asp-for="PhoneNumber" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MailAddress"></label>
+                        <input asp-for="MailAddress" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NumberOfEmployees"></label>
+                        <input asp-for="NumberOfEmployees" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CompanyType"></label>
+                        <input asp-for="CompanyType" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="WebSites"></label>
+                        <input asp-for="WebSites" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Address"></label>
+                        <input asp-for="Address" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TaxNumber"></label>
+                        <input asp-for="TaxNumber" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MersisNumber"></label>
+                        <input asp-for="MersisNumber" class="form-control" readonly />
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

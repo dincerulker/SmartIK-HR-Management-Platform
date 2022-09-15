@@ -1,0 +1,81 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using SmartIK.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using System.Security.Claims
+@model PermissionViewModel
+
+@{
+    ViewData["Title"] = "Permissions";
+    var user = await UserManager.GetUserAsync(User);
+    var userId = UserManager.GetUserId(User);
+}
+
+@section Link {
+    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+
+}
+
+<table id="myTable" class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th class="text-center align-middle">Employee</th>
+            <th class="text-center align-middle">Permission Name</th>
+            <th class="text-center align-middle">Request Permission Date</th>
+            <th class="text-center align-middle">Permission Start Date</th>
+            <th class="text-center align-middle">Permission End Date</th>
+            <th class="text-center align-middle">Permission Days</th>
+            <th class="text-center align-middle">Status</th>
+            @if (await UserManager.IsInRoleAsync(user, "Company Manager"))
+            {
+                <th class="text-center align-middle">Permission Operations</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var permission in Model.Permissions)
+        {
+            <tr>
+                <td class="text-center align-middle">@permission.ApplicationUser.FirstName @permission.ApplicationUser.LastName</td>
+                <td class="text-center align-middle">@permission.PermissionName</td>
+                <td class="text-center align-middle">@permission.RequestPermissionDate.ToShortDateString()</td>
+                <td class="text-center align-middle">@permission.PermissionStartDate.ToShortDateString()</td>
+                <td class="text-center align-middle">@permission.PermissionEndDate.ToShortDateString()</td>
+                <td class="text-center align-middle">@permission.PermissionDays</td>
+                <td class="text-center align-middle">
+                    @if (permission.Status == StatusEnum.Accept)
+                    {
+                        <i style="color: green;" class="fa-regular fa-circle-check"></i>
+                    }
+                    else if (permission.Status == StatusEnum.Decline)
+                    {
+                        <i style="color: red;" class="fa-regular fa-circle-xmark"></i>
+                    }
+                    else
+                    {
+                        <i style="color: #B09900;" class="fa-regular fa-hourglass-half"></i>
+                    }
+                </td>
+                @if (await UserManager.IsInRoleAsync(user, "Company Manager"))
+                {
+                    
+                        <td class="text-center align-middle">
+                            <a class="btn btn-outline-primary @(permission.Status == StatusEnum.Waiting ? "" : "disabled")" asp-controller="Permission" asp-action="PermissionReply" asp-route-id="@permission.Id">Reply</a>
+                        </td>
+                    
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json"
+                }
+            });
+        });
+    </script>
+}

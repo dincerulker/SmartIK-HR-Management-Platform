@@ -1,0 +1,110 @@
+﻿@model AddCreditCardViewModel
+
+<div class="col-md-6">
+    <form asp-action="AddCreditCard" method="post" enctype="multipart/form-data">
+        <div class="card card-warning">
+            <div class="card-header">
+                <h3 class="card-title">Credit Card Informations</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="container-fluid">
+                    @*<div class="row">
+                        <div class="col-6">*@
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="Bank"></label>
+                            <select asp-for="Bank" class="form-control" asp-items="Html.GetEnumSelectList<BankEnum>()">
+                            </select>
+                            <span asp-validation-for="Bank" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="CardName">Name on card</label>
+                            <input asp-for="CardName" type="text" class="form-control" placeholder="" />
+                            <span asp-validation-for="CardName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="CardNumber">Credit card number</label>
+                            <input asp-for="CardNumber" type="text" class="form-control" placeholder="" />
+                            <span asp-validation-for="CardNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="Expire">Expiration</label>
+                            <input asp-for="Expire" type="text" class="form-control" placeholder="mm/yy" />
+                            <span asp-validation-for="Expire" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="Cvv">CVV</label>
+                            <input asp-for="Cvv" type="text" class="form-control" placeholder="" />
+                            <span asp-validation-for="Cvv" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Brand"></label>
+                            <select asp-for="Brand" class="form-control" asp-items="Html.GetEnumSelectList<BrandEnum>()">
+                            </select>
+                            <span asp-validation-for="Brand" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <hr class="mb-4">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Add</button>
+
+
+
+                    @*<div class="form-group">
+                            <label asp-for="CardName"></label>
+                            <input asp-for="CardName" class="form-control">
+                            <span class="text-danger" asp-validation-for="CardName"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CardNumber"></label>
+                            <input type="text" asp-for="CardNumber" class="form-control">
+                            <span class="text-danger" asp-validation-for="CardNumber"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Bank"></label>
+                            <select asp-for="Bank" class="form-control" asp-items="Html.GetEnumSelectList<BankEnum>()">
+                            </select>
+                            <span asp-validation-for="Bank" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Brand"></label>
+                            <select asp-for="Brand" class="form-control" asp-items="Html.GetEnumSelectList<BrandEnum>()">
+                            </select>
+                            <span asp-validation-for="Brand" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Cvv"></label>
+                            <input type="text" asp-for="Cvv" class="form-control">
+                            <span class="text-danger" asp-validation-for="Cvv"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Day"></label>
+                            <input asp-for="Day" class="form-control">
+                            <span class="text-danger" asp-validation-for="Day"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Mounth"></label>
+                            <input asp-for="Mounth" class="form-control">
+                            <span class="text-danger" asp-validation-for="Mounth"></span>
+                        </div>
+                        <button class="btn btn-success">Add</button>*@
+                </div>
+            </div>
+        </div>
+        @*</div>
+            </div>*@
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+   
+   
+}

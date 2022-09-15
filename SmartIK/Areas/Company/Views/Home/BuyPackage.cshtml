@@ -1,0 +1,54 @@
+﻿@model HomeViewModel
+<link href="~/css/card.css" rel="stylesheet" />
+
+<script src="~/js/card.js"></script>
+
+<main>
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+
+        @foreach (var item in Model.Packages)
+        {
+
+            <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header py-3">
+                        <h4 class="my-0 fw-normal">@item.PackageName</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class=" text-center"> <img src="~/img/@item.PicturePath" style="height:200px;" alt="Alternate Text" /> </div>
+
+
+                        <div class="text-center row">
+
+                            <h5 class="card-title justify-content-between text-center font-weight-bold">@item.PackageName</h5>
+
+
+                            <h1 class="card-title pricing-card-title text-center" style="font-weight:bold">$@item.PackagePrice<small class="text-muted fw-light">/yr</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li></li>
+                                <li>@item.PackageDescription</li>
+                                <li><span class="font-weight-bold" style="color: purple">@item.PersonalCount</span>  Max Personel</li>
+                                
+                            </ul>
+
+                            <form action="PackageDetail" method="post">
+                                <input hidden asp-for="PackageId" />
+                                <a asp-controller="Home" asp-action="BuyPackagedetail" asp-route-id="@item.Id" class="w-100 btn btn-lg btn-outline-primary">Buy Package</a>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        }
+    </div>
+
+
+
+
+</main>
+
+

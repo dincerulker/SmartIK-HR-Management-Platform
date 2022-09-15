@@ -1,0 +1,81 @@
+﻿@model UserDetailViewModel
+
+@{
+    var firstName = @Model.ApplicationUser.FirstName;
+    var lastName = @Model.ApplicationUser.LastName;
+}
+
+@section Link {
+    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+    <li class="breadcrumb-item"><a asp-controller="User" asp-action="Index">User List</a></li>
+}
+
+<div class="container">
+
+    <div class="card-body box-profile">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">@firstName @lastName</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="text-center">
+                <img class="profile-user-img img-fluid img-circle" style="width:200px;" src="~/img/@Model.ApplicationUser.PicturePath" alt="User profile picture">
+            </div>
+            <h3 class="profile-username text-center">@Model.ApplicationUser.FirstName @Model.ApplicationUser.LastName</h3>
+            <p class="text-muted text-center">@Model.ApplicationUser.Title</p>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.ApplicationUser.Corparation.CompanyName">Company Name</label>
+                            <input asp-for="@Model.ApplicationUser.Corparation.CompanyName" disabled class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.ApplicationUser.FirstName">First Name</label>
+                            <input asp-for="@Model.ApplicationUser.FirstName" disabled class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.ApplicationUser.LastName">Last Name</label>
+                            <input asp-for="@Model.ApplicationUser.LastName" disabled class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.ApplicationUser.TCKN">Turkish Identity Number</label>
+                            <input asp-for="@Model.ApplicationUser.TCKN" disabled class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.ApplicationUser.Email"></label>
+                            <input asp-for="@Model.ApplicationUser.Email" disabled class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.ApplicationUser.Phone"></label>
+                            <input asp-for="@Model.ApplicationUser.Phone" disabled class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.ApplicationUser.Address"></label>
+                            <input asp-for="@Model.ApplicationUser.Address" disabled class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.ApplicationUser.BirthDate">Birth Date</label>
+                            <input disabled value="@Model.ApplicationUser.BirthDate.ToString()" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.ApplicationUser.HiringDate">Hiring Date</label>
+                            <input disabled value="@Model.ApplicationUser.HiringDate.ToString()" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Gender"></label>
+                            <input disabled value="@Model.Gender" class="form-control" />
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

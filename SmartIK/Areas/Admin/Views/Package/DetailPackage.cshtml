@@ -1,0 +1,96 @@
+﻿@model DetailPackageViewModel
+
+@section Link {
+    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+    <li class="breadcrumb-item"><a asp-action="Packages" asp-controller="Package">Packages</a></li>
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-blue">
+            <h3 class="card-title">Package Details</h3>
+            @*<div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>*@
+        </div>
+        <div class="d-flex m-4">
+            <div class="mr-3">
+                <img src="~/img/@Model.PicturePath" height="200" />
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="PackageName"></label>
+                            <input asp-for="PackageName" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label asp-for="PackageDescription"></label>
+                            <input asp-for="PackageDescription" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label asp-for="PackagePrice"></label>
+                            <input asp-for="PackagePrice" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label asp-for="CreatedDate"></label>
+                            <input asp-for="CreatedDate" type="date" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label asp-for="PublishStartDate"></label>
+                            <input asp-for="PublishStartDate" type="date" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label asp-for="PublishEndDate"></label>
+                            <input asp-for="PublishEndDate" type="date" class="form-control" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header bg-blue">
+            <h3 class="card-title">Package Companies</h3>
+            @*<div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>*@
+        </div>
+        <div class="d-flex">
+
+            <div class="row">
+                @if (Model.Companies != null)
+                {
+                    @foreach (var item in Model.Companies)
+                    {
+                        <div class="col">
+                            <div class="form-group m-5">
+                                <label asp-for="@item.CompanyName">Company Name</label>
+                                <input asp-for="@item.CompanyName" class="form-control" readonly />
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿@model AdvancePaymentUserViewModel
+
+@section Link {
+    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+    
+}
+
+<a class="btn btn-primary" asp-controller="AdvancePayment" asp-action="APCreate"> Add</a> <hr />
+<table id="myTable" class="table table-striped table-bordereds ">
+    <thead class="thead-dark">
+        <tr>
+            <th class="text-center align-middle">Description</th>
+            <th class="text-center align-middle">Advance Amount</th>
+            <th class="text-center align-middle">Request Date</th>
+            <th class="text-center align-middle">Reply Date</th>
+            <th class="text-center align-middle">Response</th>
+            <th class="text-center align-middle">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var advance in Model.AdvancePayments)
+        {
+            <tr>
+
+                <td class="text-center align-middle">@advance.Description</td>
+                <td class="text-center align-middle">@advance.AdvanceAmount</td>
+                <td class="text-center align-middle">@advance.RequestDate.ToShortDateString()</td>
+                <td class="text-center align-middle">@advance.RequestDate.ToShortDateString()</td>
+                <td class="text-center align-middle">@advance.Response</td>
+                <td class="text-center align-middle">@advance.Status</td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json"
+                }
+            });
+        });
+    </script>
+}

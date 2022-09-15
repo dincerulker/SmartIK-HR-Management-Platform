@@ -1,0 +1,105 @@
+﻿@using SmartIK.Areas.Admin.Enums
+@model EditCompanyViewModel
+@{
+    ViewData["Title"] = "Edit Company";
+}
+
+@section Link {
+    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+    <li class="breadcrumb-item"><a asp-action="Companies" asp-controller="Company">Companies</a></li>
+}
+
+<div class="col-md-6">
+    <form asp-action="EditCompany" method="post" enctype="multipart/form-data">
+        <div class="card card-warning">
+            <div class="card-header">
+                <h3 class="card-title">Edit Company</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label asp-for="CompanyName"></label>
+                    <input asp-for="CompanyName" class="form-control">
+                    <span class="text-danger" asp-validation-for="CompanyName"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="WebSites"></label>
+                    <input asp-for="WebSites" class="form-control" />
+                    <span class="text-danger" asp-validation-for="WebSites"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MailAddress"></label>
+                    <input asp-for="MailAddress" class="form-control">
+                    <span class="text-danger" asp-validation-for="MailAddress"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber"></label>
+                    <input asp-for="PhoneNumber" class="form-control">
+                    <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TaxNumber"></label>
+                    <input asp-for="TaxNumber" class="form-control">
+                    <span class="text-danger" asp-validation-for="TaxNumber"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MersisNumber"></label>
+                    <input asp-for="MersisNumber" class="form-control">
+                    <span class="text-danger" asp-validation-for="MersisNumber"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address"></label>
+                    <input asp-for="Address" class="form-control">
+                    <span class="text-danger" asp-validation-for="Address"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CompanyType"></label>
+                    <select asp-for="CompanyType" class="form-control" asp-items="Html.GetEnumSelectList<CompanyTypeEnum>()">
+                        <option value=""> </option>
+                    </select>
+                    <span asp-validation-for="CompanyType" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NumberOfEmployees"></label>
+                    <input asp-for="NumberOfEmployees" class="form-control">
+                    <span class="text-danger" asp-validation-for="NumberOfEmployees"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-control d-none" asp-for="CompanyLogo"></label>
+                    <div class="my-2" id="preview">
+                        <img src="~/img/@Model.ImagePath" alt="Preview" height="200" />
+                    </div>
+                    <input asp-for="CompanyLogo" type="file" class="form-control-file">
+                    <span asp-validation-for="CompanyLogo" class="text-danger"></span>
+                </div>
+
+                <button class="btn btn-success">Edit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @*<partial name="_AddImageScriptsPartial" />*@
+    <script>
+        // Add image and preview
+        var img = $("#preview > img")[0];
+        $("#CompanyLogo").change(function (event) {
+            var imgFile = this.files[0];
+            if (imgFile && imgFile.type.startsWith("image/")) {
+                img.src = URL.createObjectURL(imgFile);
+            }
+            else {
+                img.src = "#";
+                $("#preview").addClass("d-none");
+            }
+        });
+    </script>
+}

@@ -1,0 +1,106 @@
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@using SmartIK.Data
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@model List<Expense>;
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var userId = UserManager.GetUserId(User);
+}
+@section Link {
+    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+    <li class="breadcrumb-item"><a asp-controller="Expense" asp-action="Index">Expenses</a></li>
+}
+
+<table id="myTable" class="table table-active  table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th class="text-center align-middle">Employee</th>
+            <th class="text-center align-middle">Description</th>
+            <th class="text-center align-middle">Expense Amount</th>
+            <th class="text-center align-middle">Request Date</th>
+            <th class="text-center align-middle">Reply Date</th>
+            <th class="text-center align-middle">Response</th>
+            <th class="text-center align-middle">File</th>
+            <th class="text-center align-middle">Status</th>
+            <th class="text-center align-middle">Expense Operations</th>
+        </tr>
+    </thead>
+
+    <tbody class="">
+        @foreach (var expence in Model)
+        {
+            <tr>
+                <td class="text-center align-middle">@expence.ApplicationUser.FirstName @expence.ApplicationUser.LastName</td>
+                <td class="text-center align-middle">@expence.Description</td>
+                <td class="text-center align-middle">@expence.Price.ToString("C2")</td>
+                <td class="text-center align-middle">@expence.RequestDate.ToShortDateString()</td>
+                <td class="text-center align-middle">@(expence.ResponseDate == null ? "" : expence.ResponseDate.Value.ToShortDateString())</td>
+                <td class="text-center align-middle">@expence.Response</td>
+                <td class="text-center align-middle">
+                    <a onclick=preview('@expence.FilePath') href="#">
+                        <i class="fas fa-file-download"></i>
+                    </a>
+                </td>
+                <td class="text-center align-middle">
+                    @if (expence.Status == StatusEnum.Accept)
+                    {
+                        <i style="color: green;" class="fa-regular fa-circle-check"></i>
+                    }
+                    else if (expence.Status == StatusEnum.Decline)
+                    {
+                        <i style="color: red;" class="fa-regular fa-circle-xmark"></i>
+                    }
+                    else
+                    {
+                        <i style="color: #B09900;" class="fa-regular fa-hourglass-half"></i>
+                    }
+                </td>
+                @if (await UserManager.IsInRoleAsync(user, "Company Manager"))
+                {
+                    <td class="text-center align-middle">
+                        <a class="btn btn-outline-primary @(expence.Status == StatusEnum.Waiting ? " " : " disabled")" asp-controller="Expense" asp-action="ExpenseReply" asp-route-id="@expence.Id">Reply</a>
+                    </td>
+                }
+                @if (await UserManager.IsInRoleAsync(user, "Employee"))
+                {
+
+                    <td class="text-center align-middle">
+                        <a class="btn btn-outline-success @(expence.Status == StatusEnum.Waiting ? " " : " disabled")" asp-controller="Expense" asp-action="Edit" asp-route-id="@expence.Id">Edit</a>
+                    </td>
+
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script type="text/javascript">
+
+        function preview(fileName) {
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                data: { fileName: fileName },
+                url: "/Display/Index",
+                success: function (response) {
+                    if (response == 'File not found!') {
+                        alert(response);
+                    } else {
+                        window.open("/Display/Show?path=" + response, "_blank");
+                    }
+                },
+            });
+        };
+
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json"
+                }
+            });
+        });
+    </script>
+}

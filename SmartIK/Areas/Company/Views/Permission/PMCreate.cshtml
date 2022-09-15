@@ -1,0 +1,98 @@
+﻿@using SmartIK.Areas.Company.Enums
+@model PermissionCreateViewModel
+@if (TempData["Message"] != null)
+{
+    <div class="bg-danger text-center p-3 mb-2" style="border-radius: 15px;">
+        @TempData["Message"]
+    </div>
+}
+@{
+    ViewData["Title"] = "";
+}
+
+@section Link {
+    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+    <li class="breadcrumb-item"><a asp-controller="Permission" asp-action="Permissions">Permissions</a></li>
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
+    #box {
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    }
+</style>
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Permission Create</h3>
+    </div>
+    <div class="  m-3 m-auto" style="max-width:1100px;">
+        <div class="card-body">
+            <div id="box" class="row">
+                <div class="col">
+                    <form asp-action="PMCreate" asp-controller="Permission" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label asp-for="PermissionType" class="control-label"></label>
+                            <select id="selectkutuID" onchange="degergoster()" asp-for="PermissionType"
+                                    class="form-control"
+                                    asp-items="Html.GetEnumSelectList<PermissionType>()">
+                                @*<option>Select type ...</option>*@
+                            </select>
+                            <span asp-validation-for="PermissionType" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PermissionStartDate"></label>
+                            <input asp-for="PermissionStartDate" id="minDate" value="6/12/2023:15:37 AM" type="date" placeholder="dd-mm-yyyy" class="form-control">
+                            <span class="text-danger" asp-validation-for="PermissionStartDate"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PermissionEndDate"></label>
+                            <input disabled id="EndDate" asp-for="PermissionEndDate" value="6/12/2023:15:37 AM" type="date" placeholder="dd-mm-yyyy" class="form-control">
+                            <span class="text-danger" asp-validation-for="PermissionEndDate"></span>
+                        </div>
+
+                        <div>
+                            <div class="col-md-4"></div>
+                            <button class="btn btn-primary mb-1 " asp-action="PMCreate" asp-controller="Permission">Create</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <ul class="m-3">
+                        @*<li>adsasd   asda         asd a         asd a as a   </li>
+                            <li>sdffds sdf sd sd ds sd s            sd sd sd sd.</li>
+                            <li>asdddddddddddddddddddd  saddddddddddddddddddddddddddddddddddd  sadddddddddd</li>
+                            <li>Madfl klşdsssssssssssssssssssssssssssssssssslssd.</li>
+                            <li>lorem aisdşdsaşiasl işas dişas dişa şias idai, i,ai, ad.</li>*@
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function degergoster() {
+        var selectkutu = document.getElementById('selectkutuID');
+        var selectkutu_value = selectkutu.options[selectkutu.selectedIndex].value;
+        var selectkutu_text = selectkutu.options[selectkutu.selectedIndex].text;
+        if (selectkutu_value == 5 || selectkutu_value == 6) {
+
+
+            document.getElementById("EndDate").disabled = false;
+
+        }
+        else {
+            document.getElementById("EndDate").disabled = true;
+
+        }
+
+    };
+
+</script>
+<script>
+    $(document).ready(function () {
+        var today = new Date().toISOString().split('T')[0];
+        $("#minDate").attr('min', today);
+    });
+
+</script>
